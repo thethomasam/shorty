@@ -95,7 +95,7 @@ def get_project(projectId):
 
 @cli.command()
 @click.option('-n', '--name', 'name', help='name')
-def find_project(name):
+def find(name):
     shortcut_api_token = '65e6a1cc-266a-4fa7-8ed5-67e0742b39d9'
     headers = {
         'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ def find_project(name):
     # click.echo(filtered_projects)
     for project in filtered_projects:
         print(
-            f"Team-ID: {project['team_id']}, Name: {project['name']}, Project ID: {project['id']}, Description : {project['description']}, ")
+            f"Team-ID: {project['team_id']}, Name: {project['name']}, Project ID: {project['id']} ")
     # print(filtered_projects)
 
 
@@ -133,20 +133,26 @@ def find_project(name):
 
 @cli.command()
 @click.option('-pid', '--project-id', 'projectId', help='project id')
-@click.option('-prg', '--progress', 'progress', help='progress')
+@click.option('-p', '--progress', 'progress', help='progress')
 @click.option('-bdj', '--budget', 'budget', help='budget')
-def update_project(projectId, progress, budget=False):
-    url = f"https://api.app.shortcut.com/api/v3/projects/{projectId}"
+def update(projectId=17596, progress=34, budget=False):
+    url = f"https://api.app.shortcut.com/api/v3/projects/17596"
     shortcut_api_token = '65e6a1cc-266a-4fa7-8ed5-67e0742b39d9'
 
     headers = {
         'Content-Type': 'application/json',
         'Shortcut-Token': shortcut_api_token
     }
-    data = {
-        'description': 'No??',
-        # Add other fields to update as needed
-    }
+    data = get_project(projectId)
+    progress_pattern = r"\[Progress: (\d+)%\]"
+
+# Replacement percentage (e.g., updating progress to 75%)
+    new_progress_value = "75"
+
+# Perform replacement
+    data = re.sub(progress_pattern, f"[Progress: {new_progress_value}%]", data)
+
+
     response = requests.put(url, headers=headers, json=data)
     click.echo(response.json())
 
@@ -157,8 +163,8 @@ def update_project(projectId, progress, budget=False):
 
 
 cli.add_command(create_project)
-cli.add_command(update_project)
-cli.add_command(find_project)
+cli.add_command(update)
+cli.add_command(find)
 # cli.add_command(get_project)
 
 

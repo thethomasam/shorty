@@ -48,7 +48,7 @@ def fetch_workflow(user_id):
     "created_at": "2016-12-31T12:30:00Z",
     "description": 'test',
     "external_id": "foo",
-    "follower_ids": [],
+        "follower_ids": [],
     "iteration_length": 1,
     "name": 'My Test',
     "start_time": "2016-12-31T12:30:00Z",
